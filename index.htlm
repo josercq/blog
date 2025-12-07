@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meu Blog — Tech, Vida & Ideias</title>
+  <meta name="description" content="Blog completo em HTML com layout moderno, responsivo e pronto para personalizar." />
+
+  <style>
+    :root{
+      --bg: #0b0d10;
+      --card: #12151a;
+      --muted: #9aa4b2;
+      --text: #e6e9ef;
+      --brand: #7c5cff;
+      --brand-2:#19c37d;
+      --border: #222834;
+      --radius: 16px;
+      --radius-sm: 12px;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --maxw: 1200px;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: radial-gradient(1200px 700px at 80% -10%, #1d2140 0%, transparent 60%),
+                  radial-gradient(900px 700px at -10% 10%, #1a2b2a 0%, transparent 50%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.6;
+    }
+    a{ color:inherit; text-decoration:none; }
+    img{ max-width:100%; display:block; border-radius:12px; }
+
+    /* Layout base */
+    .container{ width:100%; max-width:var(--maxw); margin:0 auto; padding:0 18px; }
+    .grid{
+      display:grid; gap:18px;
+      grid-template-columns: 1.6fr .8fr;
+    }
+    @media (max-width: 900px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+
+    /* Header */
+    header{
+      position:sticky; top:0; z-index:50;
+      background: rgba(11,13,16,.8);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid var(--border);
+    }
+    .nav{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 0;
+    }
+    .logo{
+      display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.3px;
+    }
+    .logo-dot{
+      width:12px; height:12px; border-radius:50%;
+      background:linear-gradient(45deg,var(--brand),var(--brand-2));
+      box-shadow: 0 0 18px rgba(124,92,255,.8);
+    }
+    nav ul{ display:flex; gap:14px; list-style:none; padding:0; margin:0; }
+    nav a{
+      padding:8px 10px; border-radius:10px; color:var(--muted);
+    }
+    nav a:hover, nav a.active{
+      color:var(--text); background:#151a21;
+    }
+    .nav-actions{
+      display:flex; align-items:center; gap:8px;
+    }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      background: linear-gradient(45deg, var(--brand), #a78bfa);
+      color:white; border:none; padding:10px 12px; border-radius:12px;
+      font-weight:600; cursor:pointer; box-shadow:var(--shadow);
+    }
+    .btn.secondary{
+      background:#171b22; color:var(--text); border:1px solid var(--border);
+      box-shadow:none;
+    }
+
+    /* Hero */
+    .hero{
+      margin:18px 0 6px; padding:22px; border:1px solid var(--border);
+      background:
+        radial-gradient(600px 300px at 90% 0%, rgba(124,92,255,.25), transparent 60%),
+        var(--card);
+      border-radius:var(--radius); box-shadow: var(--shadow);
+      display:grid; gap:16px; grid-template-columns: 1.2fr .8fr; align-items:center;
+    }
+    @media (max-width: 900px){ .hero{ grid-template-columns:1fr; } }
+    .hero h1{ margin:0; font-size: clamp(24px, 3vw, 36px); }
+    .hero p{ margin:6px 0 0; color:var(--muted); }
+    .hero .hero-chip{
+      display:inline-flex; gap:8px; align-items:center;
+      background:#0e1115; border:1px solid var(--border); color:var(--muted);
+      padding:6px 10px; border-radius:999px; font-size:13px; width:max-content;
+    }
+    .hero-search{
+      background:#0e1115; border:1px solid var(--border); border-radius:12px;
+      padding:10px; display:flex; align-items:center; gap:8px;
+    }
+    .hero-search input{
+      width:100%; background:transparent; border:none; outline:none; color:var(--text);
+      font-size:15px;
+    }
+
+    /* Cards de posts */
+    .section-title{
+      display:flex; align-items:center; justify-content:space-between;
+      margin:16px 0 8px;
+    }
+    .section-title h2{ margin:0; font-size:18px; }
+    .section-title small{ color:var(--muted); }
+
+    .posts{
+      display:grid; gap:14px;
+    }
+    .post-card{
+      border:1px solid var(--border); background:var(--card);
+      border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow);
+      display:grid; grid-template-columns: .9fr 1.1fr; gap:0;
+    }
+    @media (max-width: 650px){ .post-card{ grid-template-columns:1fr; } }
+
+    .post-cover{ min-height:180px; background:#0e1115; }
+    .post-content{ padding:16px; display:flex; flex-direction:column; gap:10px; }
+    .meta{
+      display:flex; gap:10px; align-items:center; color:var(--muted); font-size:13px;
+      flex-wrap:wrap;
+    }
+    .tag{
+      font-size:12px; padding:4px 8px; border:1px solid var(--border);
+      border-radius:999px; color:var(--muted); background:#0e1115;
+    }
+    .post-title{ font-size:18px; margin:0; }
+    .post-excerpt{ margin:0; color:#c8d0db; }
+    .readmore{
+      margin-top:auto; display:inline-flex; align-items:center; gap:6px;
+      color:#d7d9ff; font-weight:600;
+    }
+
+    /* Post destaque / “single” fake */
+    .featured{
+      margin-top:14px; padding:16px; border:1px solid var(--border);
+      background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
+      display:grid; gap:14px;
+    }
+    .featured h3{ margin:0; font-size:20px; }
+    .featured p{ margin:0; color:#cdd5e1; }
+    .featured .toc{
+      border-top:1px dashed var(--border); padding-top:10px; color:var(--muted);
+      font-size:14px;
+    }
+
+    .comments{
+      margin-top:14px; padding:16px; border:1px solid var(--border);
+      background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow);
+      display:grid; gap:12px;
+    }
+    .comment{
+      padding:10px; border:1px solid var(--border); border-radius:12px; background:#0e1115;
+    }
+    .comment b{ font-size:14px; }
+    .comment small{ color:var(--muted); }
+
+    .comment-form{
+      display:grid; gap:8px;
+    }
+    .comment-form input, .comment-form textarea{
+      width:100%; background:#0e1115; border:1px solid var(--border);
+      color:var(--text); padding:10px 12px; border-radius:12px; outline:none;
+      font-size:14px;
+    }
+    .comment-form textarea{ min-height:110px; resize:vertical; }
+
+    /* Sidebar */
+    aside{
+      position:sticky; top:80px; display:grid; gap:14px; height:max-content;
+    }
+    .widget{
+      border:1px solid var(--border); background:var(--card);
+      border-radius:var(--radius); padding:14px; box-shadow:var(--shadow);
+      display:grid; gap:10px;
+    }
+    .widget h4{ margin:0; font-size:16px; }
+    .widget .list{
+      display:grid; gap:8px; color:#d6d9df;
+    }
+    .widget .list a{
+      padding:8px; border-radius:10px; background:#0e1115; border:1px solid var(--border);
+    }
+    .widget .list a:hover{ border-color:#2c3442; }
+
+    .tags{
+      display:flex; gap:8px; flex-wrap:wrap;
+    }
+
+    /* Paginação */
+    .pagination{
+      margin:16px 0 28px; display:flex; gap:8px; justify-content:center;
+    }
+    .page{
+      border:1px solid var(--border); background:#0e1115;
+      padding:8px 12px; border-radius:10px; color:var(--muted);
+    }
+    .page.active{ color:var(--text); border-color:#2b3341; background:#141922; }
+
+    /* Footer */
+    footer{
+      border-top:1px solid var(--border); color:var(--muted);
+      padding:18px 0 28px; margin-top:10px;
+    }
+    .footer-grid{
+      display:grid; gap:16px; grid-template-columns: 1.2fr .8fr .8fr;
+    }
+    @media (max-width: 800px){ .footer-grid{ grid-template-columns:1fr; } }
+    .footer-grid a{ color:#cfd6e1; }
+    .tiny{ font-size:12px; color:var(--muted); }
+
+    /* util */
+    .row{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+    .muted{ color:var(--muted); }
+    .divider{ height:1px; background:var(--border); margin:6px 0; }
+    .hidden{ display:none !important; }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="container nav">
+      <a class="logo" href="#">
+        <span class="logo-dot"></span>
+        <span>Meu Blog</span>
+      </a>
+
+      <nav>
+        <ul>
+          <li><a class="active" href="#">Início</a></li>
+          <li><a href="#posts">Posts</a></li>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="btn secondary" id="themeBtn" aria-label="Alternar tema">🌙</button>
+        <a class="btn" href="#newsletter">Assinar Newsletter</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <div class="hero-chip">✨ Novo • Atualizações semanais</div>
+        <h1 id="hero-title">Tech, criatividade e vida real — sem enrolação.</h1>
+        <p>Um blog completo para você publicar artigos, organizar categorias, receber comentários e crescer sua audiência.</p>
+        <div class="row" style="margin-top:10px">
+          <span class="tag">#programação</span>
+          <span class="tag">#design</span>
+          <span class="tag">#produtividade</span>
+          <span class="tag">#opinião</span>
+        </div>
+      </div>
+
+      <div>
+        <div class="hero-search" role="search">
+          🔎
+          <input id="searchInput" type="search" placeholder="Buscar posts por título ou tag..." />
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="row">
+          <button class="btn secondary filterBtn" data-filter="all">Tudo</button>
+          <button class="btn secondary filterBtn" data-filter="tech">Tech</button>
+          <button class="btn secondary filterBtn" data-filter="vida">Vida</button>
+          <button class="btn secondary filterBtn" data-filter="guias">Guias</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="grid">
+      <!-- COLUNA PRINCIPAL -->
+      <section>
+        <div class="section-title">
+          <h2 id="posts">Últimos posts</h2>
+          <small>Atualizado em <span id="today"></span></small>
+        </div>
+
+        <div class="posts" id="postsList">
+
+          <!-- POST CARD 1 -->
+          <article class="post-card" data-tags="tech guias javascript">
+            <div class="post-cover">
+              <img src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop" alt="Notebook com código" />
+            </div>
+            <div class="post-content">
+              <div class="meta">
+                <span class="tag">Tech</span>
+                <span>05 dez 2025</span>
+                <span>• 6 min</span>
+                <span>por Jose</span>
+              </div>
+              <h3 class="post-title">Como estruturar um blog estático do zero</h3>
+              <p class="post-excerpt">Um passo a passo simples para criar um blog rápido, bonito e fácil de manter usando somente HTML/CSS/JS.</p>
+              <a class="readmore" href="#post-destaque">Ler agora →</a>
+            </div>
+          </article>
+
+          <!-- POST CARD 2 -->
+          <article class="post-card" data-tags="vida produtividade">
+            <div class="post-cover">
+              <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1200&auto=format&fit=crop" alt="Pessoa trabalhando focada" />
+            </div>
+            <div class="post-content">
+              <div class="meta">
+                <span class="tag">Vida</span>
+                <span>28 nov 2025</span>
+                <span>• 4 min</span>
+                <span>por Jose</span>
+              </div>
+              <h3 class="post-title">Rotina criativa: produzindo sem burnout</h3>
+              <p class="post-excerpt">Como manter constância sem se destruir. Estratégias reais pra quem trabalha com criatividade.</p>
+              <a class="readmore" href="#post-destaque">Ler agora →</a>
+            </div>
+          </article>
+
+          <!-- POST CARD 3 -->
+          <article class="post-card" data-tags="tech guias css">
+            <div class="post-cover">
+              <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1200&auto=format&fit=crop" alt="Código na tela" />
+            </div>
+            <div class="post-content">
+              <div class="meta">
+                <span class="tag">Guias</span>
+                <span>13 nov 2025</span>
+                <span>• 8 min</span>
+                <span>por Jose</span>
+              </div>
+              <h3 class="post-title">Guia de CSS moderno: grid, flex e responsivo</h3>
+              <p class="post-excerpt">Grid pra layout macro, Flex pra micro. Bora organizar isso na cabeça com exemplos sólidos.</p>
+              <a class="readmore" href="#post-destaque">Ler agora →</a>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- PAGINAÇÃO -->
+        <div class="pagination" aria-label="Paginação">
+          <span class="page active">1</span>
+          <span class="page">2</span>
+          <span class="page">3</span>
+          <span class="page">→</span>
+        </div>
+
+        <!-- POST DESTAQUE / TEMPLATE SINGLE -->
+        <article class="featured" id="post-destaque" aria-labelledby="post-title">
+          <div class="meta">
+            <span class="tag">Tech</span>
+            <span>05 dez 2025</span>
+            <span>• 6 min</span>
+            <span>por Jose</span>
+          </div>
+          <h3 id="post-title">Como estruturar um blog estático do zero</h3>
+          <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1400&auto=format&fit=crop" alt="Setup de programação" />
+
+          <p>
+            Criar um blog estático é ótimo quando você quer performance, simplicidade e liberdade de hosting.
+            Você escreve posts como arquivos HTML ou Markdown e publica em qualquer lugar.
+          </p>
+          <p>
+            A estrutura mínima costuma ser:
+            <b>index.html</b> (lista de posts), <b>post.html</b> (template),
+            uma pasta <b>/assets</b> (CSS, imagens) e uma <b>/posts</b>.
+          </p>
+
+          <div class="toc">
+            <b>Sumário rápido</b>
+            <ol>
+              <li>Escolha do layout</li>
+              <li>Organização dos posts</li>
+              <li>Deploy simples</li>
+            </ol>
+          </div>
+
+          <p>
+            A partir daqui você pode colocar um gerador de site (Hugo, Jekyll, Astro…),
+            ou continuar 100% manual. O importante é manter organização e consistência.
+          </p>
+        </article>
+
+        <!-- COMENTÁRIOS -->
+        <section class="comments" aria-labelledby="comments-title">
+          <h4 id="comments-title">Comentários</h4>
+
+          <div class="comment">
+            <b>Ana</b> <small>• 2 dias atrás</small>
+            <p>Curti demais o layout. Vou adaptar pro meu portfólio!</p>
+          </div>
+
+          <div class="comment">
+            <b>Marcos</b> <small>• 1 semana atrás</small>
+            <p>Esse sumário ficou massa, dá pra expandir fácil com JS.</p>
+          </div>
+
+          <form class="comment-form" id="commentForm">
+            <input id="nameInput" type="text" placeholder="Seu nome" required />
+            <textarea id="commentInput" placeholder="Seu comentário" required></textarea>
+            <button class="btn" type="submit">Enviar comentário</button>
+            <small class="muted">Obs: comentários só no front-end neste exemplo.</small>
+          </form>
+
+          <div id="newComments"></div>
+        </section>
+
+      </section>
+
+      <!-- SIDEBAR -->
+      <aside>
+
+        <div class="widget">
+          <h4>Buscar</h4>
+          <div class="hero-search">
+            🔎
+            <input id="searchInputSidebar" type="search" placeholder="Digite e aperte Enter..." />
+          </div>
+          <small class="muted">A busca filtra os cards por título/tag.</small>
+        </div>
+
+        <div class="widget">
+          <h4>Categorias</h4>
+          <div class="list">
+            <a href="#" class="filterLink" data-filter="tech">Tech (12)</a>
+            <a href="#" class="filterLink" data-filter="vida">Vida (7)</a>
+            <a href="#" class="filterLink" data-filter="guias">Guias (5)</a>
+            <a href="#" class="filterLink" data-filter="opinião">Opinião (3)</a>
+          </div>
+        </div>
+
+        <div class="widget" id="newsletter">
+          <h4>Newsletter</h4>
+          <p class="muted">Receba um post novo por semana. Sem spam.</p>
+          <form class="comment-form">
+            <input type="email" placeholder="seuemail@exemplo.com" required />
+            <button class="btn" type="submit">Assinar</button>
+          </form>
+        </div>
+
+        <div class="widget">
+          <h4>Tags</h4>
+          <div class="tags">
+            <span class="tag">javascript</span>
+            <span class="tag">css</span>
+            <span class="tag">html</span>
+            <span class="tag">produtividade</span>
+            <span class="tag">ui/ux</span>
+            <span class="tag">carreira</span>
+          </div>
+        </div>
+
+        <div class="widget" id="sobre">
+          <h4>Sobre o autor</h4>
+          <div class="row">
+            <img src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=256&auto=format&fit=crop" alt="Foto do autor" style="width:64px;height:64px;border-radius:50%;" />
+            <div>
+              <b>Jose Candido</b>
+              <div class="muted tiny">Dev, curioso e viciado em café.</div>
+            </div>
+          </div>
+          <p class="muted">Escrevo sobre tecnologia, criatividade e como construir coisas úteis no mundo real.</p>
+        </div>
+
+      </aside>
+    </div>
+
+    <!-- CONTATO -->
+    <section class="featured" id="contato" style="margin-bottom:18px">
+      <h3>Contato</h3>
+      <p class="muted">Quer sugerir um tema ou parceria? Manda mensagem.</p>
+      <form class="comment-form">
+        <input type="text" placeholder="Seu nome" required />
+        <input type="email" placeholder="Seu e-mail" required />
+        <textarea placeholder="Sua mensagem" required></textarea>
+        <button class="btn" type="submit">Enviar</button>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <div class="logo"><span class="logo-dot"></span><span>Meu Blog</span></div>
+        <p class="muted">Um template simples, moderno e rápido para você começar seu blog hoje.</p>
+      </div>
+      <div>
+        <b>Links</b>
+        <div class="list" style="margin-top:8px">
+          <a href="#">Início</a>
+          <a href="#posts">Posts</a>
+          <a href="#sobre">Sobre</a>
+          <a href="#contato">Contato</a>
+        </div>
+      </div>
+      <div>
+        <b>Redes</b>
+        <div class="list" style="margin-top:8px">
+          <a href="#">GitHub</a>
+          <a href="#">LinkedIn</a>
+          <a href="#">Instagram</a>
+        </div>
+      </div>
+    </div>
+    <div class="container tiny" style="margin-top:12px">
+      © <span id="year"></span> Meu Blog. Feito com HTML + CSS.
+    </div>
+  </footer>
+
+  <script>
+    // Data dinâmica do rodapé/hero
+    const now = new Date();
+    document.getElementById("year").textContent = now.getFullYear();
+    document.getElementById("today").textContent =
+      now.toLocaleDateString("pt-BR", { day:"2-digit", month:"short", year:"numeric" });
+
+    // Busca e filtros
+    const postsList = document.getElementById("postsList");
+    const cards = [...postsList.querySelectorAll(".post-card")];
+
+    function applyFilter(filter, query=""){
+      cards.forEach(card=>{
+        const tags = (card.dataset.tags || "").toLowerCase();
+        const title = card.querySelector(".post-title").textContent.toLowerCase();
+        const matchFilter = filter === "all" || tags.includes(filter);
+        const matchQuery = !query || title.includes(query) || tags.includes(query);
+        card.classList.toggle("hidden", !(matchFilter && matchQuery));
+      });
+    }
+
+    document.querySelectorAll(".filterBtn").forEach(btn=>{
+      btn.addEventListener("click", ()=> applyFilter(btn.dataset.filter));
+    });
+    document.querySelectorAll(".filterLink").forEach(a=>{
+      a.addEventListener("click", (e)=>{
+        e.preventDefault();
+        applyFilter(a.dataset.filter);
+      });
+    });
+
+    const searchInputs = [
+      document.getElementById("searchInput"),
+      document.getElementById("searchInputSidebar")
+    ];
+    searchInputs.forEach(input=>{
+      input.addEventListener("input", ()=> applyFilter("all", input.value.toLowerCase()));
+    });
+
+    // Comentários fake (front-end)
+    const form = document.getElementById("commentForm");
+    const newComments = document.getElementById("newComments");
+    form.addEventListener("submit", (e)=>{
+      e.preventDefault();
+      const name = document.getElementById("nameInput").value.trim();
+      const text = document.getElementById("commentInput").value.trim();
+      if(!name || !text) return;
+
+      const div = document.createElement("div");
+      div.className = "comment";
+      div.innerHTML = `<b>${name}</b> <small>• agora</small><p>${text}</p>`;
+      newComments.prepend(div);
+
+      form.reset();
+    });
+
+    // Toggle de tema (só muda fundo/texto leve)
+    const themeBtn = document.getElementById("themeBtn");
+    let light = false;
+    themeBtn.addEventListener("click", ()=>{
+      light = !light;
+      document.body.style.background = light ? "#f6f7fb" : "";
+      document.body.style.color = light ? "#0b0d10" : "";
+      themeBtn.textContent = light ? "☀️" : "🌙";
+    });
+  </script>
+
+</body>
+</html>
